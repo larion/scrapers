@@ -1,0 +1,34 @@
+#! /usr/bin/env perl
+
+package WWW::Scrape::Coinmarketcap;
+
+use 5.018;
+use HTML::TreeBuilder::XPath;
+
+use constant cryptocurrencies => ("bitcoin", "ripple", "ethereum", "dash");
+
+my $htmltree = HTML::TreeBuilder::XPath->new_from_url("http://coinmarketcap.com");
+
+print "$_  " for $htmltree->findvalues('//thead/tr/th');
+say;
+for my $cc (cryptocurrencies) {
+    print "$_  " for $htmltree->findvalues('(//node()[@id="id-' . $cc .'"]/td');
+    say;
+}
+
+=pod
+
+=head1 NAME
+
+Download market information about selected microcurrencies.
+
+=head1 AUTHOR
+
+Larion Garaczi
+
+=head1 DATE
+
+2015
+
+=cut
+
