@@ -1,0 +1,37 @@
+#! /usr/bin/env perl
+
+package WWW::Woorden;
+
+use 5.018;
+use HTML::TreeBuilder::XPath;
+use List::MoreUtils qw/after_incl before/;
+
+binmode STDOUT, ":utf8";
+
+if (not defined $ARGV[0]) {
+    die "Please enter some Dutch words as argument.\n";
+}
+
+for my $word (@ARGV) {
+    my $htmltree = HTML::TreeBuilder::XPath->new_from_url("http://www.woorden.org/woord/$word");
+    say for before {/Kernerman Dictionaries/} after_incl {/$word/}
+        $htmltree->findvalues("//div[\@style]/*/*");
+}
+
+=pod
+
+=head1 NAME
+
+woorden - Downloads Dutch word definitions from woorden.org
+and displays them on the terminal.
+
+=head1 AUTHOR
+
+Larion Garaczi
+
+=head1 DATE
+
+2015
+
+=cut
+
